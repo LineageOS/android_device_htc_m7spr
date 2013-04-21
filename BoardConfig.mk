@@ -31,24 +31,12 @@
 TARGET_BOOTLOADER_BOARD_NAME := m7wls
 
 # Kernel
-TARGET_KERNEL_CONFIG := m7wls_defconfig
-
-# Bluetooth
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/htc/m7wls/bluetooth
+TARGET_KERNEL_CONFIG := cm_m7_defconfig
 
 # HTClog
 COMMON_GLOBAL_CFLAGS += -DHTCLOG
 
-# USB
-TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/file
-
-# Filesystem
-BOARD_BOOTIMAGE_PARTITION_SIZE := 16777216
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 16776704
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1946156032
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 27917287424
-BOARD_FLASH_BLOCK_SIZE := 131072
-
+# FIXME examination of /proc/emmc
 # cat /proc/emmc:
 # dev: size erasesize name
 # mmcblk0p19: 000ffa00 00000200 "misc"
@@ -74,3 +62,40 @@ BOARD_FLASH_BLOCK_SIZE := 131072
 # mmcblk0p32: 034ffa00 00000200 "reserve_2"
 # mmcblk0p34: 05fffc00 00000200 "reserve_3"
 # mmcblk0p31: 04729a00 00000200 "reserve"
+BOARD_BOOTIMAGE_PARTITION_SIZE := 16777216
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 16776704
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1946156032
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 27917287424
+BOARD_FLASH_BLOCK_SIZE := 131072
+
+# Bluetooth
+BOARD_HAVE_BLUETOOTH := true
+BOARD_HAVE_BLUETOOTH_QCOM := true
+BLUETOOTH_HCI_USE_MCT := true
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/htc/m7wls/bluetooth
+
+# Wifi
+WIFI_BAND := 802_11_ABG
+WPA_SUPPLICANT_VERSION := VER_0_8_X
+BOARD_WPA_SUPPLICANT_DRIVER := NL80211
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_bcmdhd
+BOARD_HOSTAPD_DRIVER := NL80211
+BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_bcmdhd
+BOARD_WLAN_DEVICE := bcmdhd
+
+WIFI_DRIVER_MODULE_PATH := "/system/lib/modules/bcmdhd.ko"
+WIFI_DRIVER_MODULE_NAME := "bcmdhd"
+WIFI_DRIVER_MODULE_ARG := "firmware_path=/system/etc/firmware/fw_bcm4335.bin nvram_path=/system/etc/calibration"
+WIFI_DRIVER_MODULE_AP_ARG := "firmware_path=/system/etc/firmware/fw_bcm4335_apsta.bin nvram_path=/system/etc/calibration"
+WIFI_DRIVER_FW_PATH_STA := "/system/etc/firmware/fw_bcm4335.bin"
+WIFI_DRIVER_FW_PATH_AP := "/system/etc/firmware/fw_bcm4335_apsta.bin"
+WIFI_DRIVER_FW_PATH_P2P := "/system/etc/firmware/fw_bcm4335_p2p.bin"
+
+# USB
+TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/file
+
+TARGET_PREBUILT_KERNEL := device/htc/m7wls/recovery_kernel
+BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
+TARGET_RECOVERY_INITRC := device/htc/m7wls/recovery/init.rc
+BOARD_HAS_NO_SELECT_BUTTON := true
+BOARD_HAS_LARGE_FILESYSTEM := true
