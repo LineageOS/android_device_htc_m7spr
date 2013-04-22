@@ -1,4 +1,4 @@
-# Master file for snd_soc_msm tabla 2.0 sound card proj=m7  DMIC DATE= 20130201
+# Master file for snd_soc_msm tabla 2.0 sound card proj=m7  DMIC DATE= 20130301
 # Lists all use case verbs
 SectionUseCase."HiFi" { 
 SectionVerb
@@ -3706,7 +3706,7 @@ SectionDevice
 		'SLIM_0_TX Channels':0:One
 		'SLIM TX7 MUX':0:DEC9
 		'DEC9 MUX':0:DMIC4
-		'DEC9 Volume':2:5C
+		'DEC9 Volume':2:59
 		'MICBIAS3 CAPLESS Switch':1:0
 	EndSequence
 
@@ -3851,12 +3851,14 @@ SectionDevice
 		'SLIM_0_TX Channels':0:One
 		'SLIM TX7 MUX':0:DEC8
 		'DEC8 MUX':0:ADC2
-		'ADC2 Volume':1:100
+		'DEC8 Volume':2:52
+		'ADC2 Volume':1:50
 	EndSequence
 
 	DisableSequence
 		'SLIM TX7 MUX':0:ZERO
 		'DEC8 MUX':0:ZERO
+		'DEC8 Volume':2:0
 		'ADC2 Volume':1:0
 	EndSequence
 
@@ -3981,13 +3983,15 @@ SectionDevice
 		'SLIM_0_TX Channels':0:One
 		'SLIM TX7 MUX':0:DEC8
 		'DEC8 MUX':0:ADC2
-		'ADC2 Volume':1:100
+		'DEC8 Volume':2:52
+		'ADC2 Volume':1:50
 	EndSequence
 
 	DisableSequence
 		'TTY Mode':0:ZERO
 		'SLIM TX7 MUX':0:ZERO
 		'DEC8 MUX':0:ZERO
+		'DEC8 Volume':2:0
 		'ADC2 Volume':1:0
 	EndSequence
 
@@ -4507,7 +4511,7 @@ SectionDevice
 		'SLIM_0_TX Channels':0:One
 		'SLIM TX7 MUX':0:DEC9
 		'DEC9 MUX':0:DMIC4
-		'DEC9 Volume':2:5C
+		'DEC9 Volume':2:56
 		'MICBIAS3 CAPLESS Switch':1:0
 	EndSequence
 
@@ -4540,7 +4544,7 @@ SectionDevice
 		'SLIM_0_TX Channels':0:One
 		'SLIM TX7 MUX':0:DEC9
 		'DEC9 MUX':0:DMIC4
-		'DEC9 Volume':2:5C
+		'DEC9 Volume':2:59
 		'MICBIAS3 CAPLESS Switch':1:0
 	EndSequence
 
@@ -4587,7 +4591,7 @@ SectionDevice
 		'IIR1 Enable Band3':1:1
 		'IIR1 Enable Band4':1:1
 		'IIR1 Enable Band5':1:1
-		'IIR1 INP1 Volume':2:3B
+		'IIR1 INP1 Volume':2:35
 		'IIR1 INP1 MUX':0:DEC5
 	EndSequence
 
@@ -4680,7 +4684,7 @@ SectionDevice
 		'IIR1 Enable Band3':1:1
 		'IIR1 Enable Band4':1:1
 		'IIR1 Enable Band5':1:1
-		'IIR1 INP1 Volume':2:3B
+		'IIR1 INP1 Volume':2:35
 		'IIR1 INP1 MUX':0:DEC5
 	EndSequence
 
@@ -4700,7 +4704,7 @@ SectionDevice
 		'IIR1 Enable Band5':1:0
 	EndSequence
 
-	ACDBID  321:2
+	ACDBID  328:2
 EndSection
 
 SectionDevice

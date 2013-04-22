@@ -1,4 +1,4 @@
-# Master file for snd_soc_msm tabla 2.0 sound card proj=AMIC_m7 DATE= 20130201
+# Master file for snd_soc_msm tabla 2.0 sound card proj=AMIC_m7WL DATE= 20130205
 # Lists all use case verbs
 SectionUseCase."HiFi" { 
 SectionVerb
@@ -3716,7 +3716,7 @@ SectionDevice
 		'SLIM_0_TX Channels':0:One
 		'SLIM TX7 MUX':0:DEC4
 		'DEC4 MUX':0:ADC3
-		'DEC4 Volume':2:5A
+		'DEC4 Volume':2:57
 		'ADC3 Volume':1:100
 		'MICBIAS3 CAPLESS Switch':1:1
 	EndSequence
@@ -3864,12 +3864,14 @@ SectionDevice
 		'SLIM_0_TX Channels':0:One
 		'SLIM TX7 MUX':0:DEC8
 		'DEC8 MUX':0:ADC2
-		'ADC2 Volume':1:100
+		'DEC8 Volume':2:52
+		'ADC2 Volume':1:50
 	EndSequence
 
 	DisableSequence
 		'SLIM TX7 MUX':0:ZERO
 		'DEC8 MUX':0:ZERO
+		'DEC8 Volume':2:0
 		'ADC2 Volume':1:0
 	EndSequence
 
@@ -3992,13 +3994,15 @@ SectionDevice
 		'SLIM_0_TX Channels':0:One
 		'SLIM TX7 MUX':0:DEC8
 		'DEC8 MUX':0:ADC2
-		'ADC2 Volume':1:100
+		'DEC8 Volume':2:52
+		'ADC2 Volume':1:50
 	EndSequence
 
 	DisableSequence
 		'TTY Mode':0:ZERO
 		'SLIM TX7 MUX':0:ZERO
 		'DEC8 MUX':0:ZERO
+		'DEC8 Volume':2:0
 		'ADC2 Volume':1:0
 	EndSequence
 
@@ -4520,7 +4524,7 @@ SectionDevice
 		'SLIM_0_TX Channels':0:One
 		'SLIM TX7 MUX':0:DEC4
 		'DEC4 MUX':0:ADC3
-		'DEC4 Volume':2:5A
+		'DEC4 Volume':2:54
 		'ADC3 Volume':1:100
 		'MICBIAS3 CAPLESS Switch':1:1
 	EndSequence
@@ -4719,7 +4723,7 @@ SectionDevice
 		'IIR1 Enable Band5':1:0
 	EndSequence
 
-	ACDBID  321:2
+	ACDBID  328:2
 EndSection
 
 SectionDevice
