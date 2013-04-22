@@ -27,7 +27,11 @@
 # inherit from common msm8960
 -include device/htc/msm8960-common/BoardConfigCommon.mk
 
+# inherit from the proprietary version
+-include vendor/htc/m7wls/BoardConfigVendor.mk
+
 # Bootloader
+TARGET_NO_BOOTLOADER := true
 TARGET_BOOTLOADER_BOARD_NAME := m7wls
 
 # Kernel
