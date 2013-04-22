@@ -24,7 +24,7 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
 # Boot ramdisk setup
 PRODUCT_PACKAGES += \
-    fstab.jet \
+    fstab.m7wls \
     init.target.rc
 
 # Custom recovery charging
