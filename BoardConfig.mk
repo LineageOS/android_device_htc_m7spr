@@ -99,6 +99,7 @@ WIFI_DRIVER_FW_PATH_P2P := "/system/etc/firmware/fw_bcm4335_p2p.bin"
 # USB
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/file
 
+TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_PREBUILT_KERNEL := device/htc/m7wls/recovery_kernel
 BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
 TARGET_RECOVERY_INITRC := device/htc/m7wls/recovery/init.rc
