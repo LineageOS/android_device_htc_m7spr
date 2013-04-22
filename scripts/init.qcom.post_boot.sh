@@ -117,6 +117,13 @@ case "$target" in
      chmod 664 /sys/devices/system/cpu/cpu1/online
      chown system /sys/power/perflock
      chown system /sys/power/cpufreq_ceiling
+     chown system /sys/power/cpunum_floor
+     chown system /sys/power/cpunum_ceiling
+     chown system /sys/power/powersave
+     chown system /sys/power/launch_event
+     chown system /sys/power/pnpmgr/apps/activity_trigger
+     chmod 664 /sys/power/pnpmgr/apps/media_mode
+     chown media.system /sys/power/pnpmgr/apps/media_mode
      chown system /sys/module/restart/parameters/notify_efs_sync
      echo "0,2,4,7,9,12" > /sys/module/lowmemorykiller/parameters/adj
         ;;
@@ -156,8 +163,8 @@ esac
 # Post-setup services
 case "$target" in
     "msm8660" | "msm8960")
-        start mpdecision
-        start thermald
+        #start mpdecision
+        start adaptive
     ;;
 esac
 

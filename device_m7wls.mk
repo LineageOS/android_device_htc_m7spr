@@ -23,10 +23,13 @@ $(call inherit-product, device/htc/msm8960-common/msm8960.mk)
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
 # Boot ramdisk setup
-PRODUCT_PACKAGES += \
-    fstab.m7wls \
-    init.target.rc \
-    init.usb.rc
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/ramdisk/root/fstab.m7wls:root/fstab.m7wls \
+    $(LOCAL_PATH)/ramdisk/root/init.qcom.firmware_links.sh:root/init.qcom.firmware_links.sh \
+    $(LOCAL_PATH)/ramdisk/root/init.qcom.sh:root/init.qcom.sh \
+    $(LOCAL_PATH)/ramdisk/root/init.target.rc:root/init.target.rc\
+    $(LOCAL_PATH)/ramdisk/root/init.usb.rc:root/init.usb.rc \
+    $(LOCAL_PATH)/ramdisk/root/ueventd.target.rc:root/ueventd.target.rc
 
 # Custom recovery charging
 PRODUCT_COPY_FILES += \
@@ -38,6 +41,13 @@ PRODUCT_COPY_FILES += \
 # Vold config
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/vold.fstab:system/etc/vold.fstab
+
+# Qualcomm init scripts
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/scripts/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
+    $(LOCAL_PATH)/scripts/init.qcom.coex.sh:system/etc/init.qcom.coex.sh \
+    $(LOCAL_PATH)/scripts/init.qcom.fm.sh:system/etc/init.qcom.fm.sh \
+    $(LOCAL_PATH)/scripts/init.qcom.post_boot.sh:system/etc/init.qcom.post_boot.sh
 
 # Sound configs
 PRODUCT_COPY_FILES += \
