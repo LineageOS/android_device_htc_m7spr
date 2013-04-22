@@ -25,7 +25,8 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 # Boot ramdisk setup
 PRODUCT_PACKAGES += \
     fstab.m7wls \
-    init.target.rc
+    init.target.rc \
+    init.usb.rc
 
 # Custom recovery charging
 PRODUCT_COPY_FILES += \
