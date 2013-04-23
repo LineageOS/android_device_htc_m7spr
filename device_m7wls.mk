@@ -25,11 +25,13 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 # Boot ramdisk setup
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/ramdisk/root/fstab.m7wls:root/fstab.m7wls \
+    $(LOCAL_PATH)/ramdisk/root/init:root/init \
+    $(LOCAL_PATH)/ramdisk/root/init.m7wls.rc:root/init.m7wls.rc \
+    $(LOCAL_PATH)/ramdisk/root/init.post_mount.sh:root/init.post_mount.sh \
+    $(LOCAL_PATH)/ramdisk/root/init.m7wls.usb.rc:root/init.m7wls.usb.rc \
+    $(LOCAL_PATH)/ramdisk/root/init.rc:root/init.rc \
+    $(LOCAL_PATH)/ramdisk/root/ueventd.m7wls.rc:root/ueventd.m7wls.rc \
     $(LOCAL_PATH)/ramdisk/root/init.qcom.firmware_links.sh:root/init.qcom.firmware_links.sh \
-    $(LOCAL_PATH)/ramdisk/root/init.qcom.sh:root/init.qcom.sh \
-    $(LOCAL_PATH)/ramdisk/root/init.target.rc:root/init.target.rc\
-    $(LOCAL_PATH)/ramdisk/root/init.usb.rc:root/init.usb.rc \
-    $(LOCAL_PATH)/ramdisk/root/ueventd.target.rc:root/ueventd.target.rc
 
 # Custom recovery charging
 PRODUCT_COPY_FILES += \

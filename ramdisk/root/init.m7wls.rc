@@ -25,31 +25,42 @@
 # OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
-#
-#start camera server as daemon
+
+# Start camera server as daemon
 service qcamerasvr /system/bin/mm-qcamera-daemon
         class late_start
         user system
         group system camera inet graphics
 
-on fs
-   # mount all the things
-   mount_all fstab.m7wls
+# On emmc mount the partition containing firmware
+on emmc-fs
+   mkdir /system
+   devwait emmc@system
+   mount ext4 emmc@system /system ro noatime barrier=0
 
    # Load Mocana FIPS module. Add here since it can make sure system is mounted
    insmod /system/lib/modules/moc_platform_mod.ko
    insmod /system/lib/modules/moc_crypto.ko
    insmod /system/lib/modules/dm-crypt.ko
+   insmod /system/lib/modules/wp_mod.ko
 
-   ## TODO this stuff is useless in cm 
-   #mkdir /ramdump 0700 root root
-   #devwait emmc@reserve
-   #mount vfat emmc@reserve /ramdump rw
-   #umount /ramdump
-   # mount carrier partition
-   #mkdir /carrier 0775 system carrier
-   #devwait emmc@carrier
-   #mount ext4 emmc@carrier /carrier nosuid nodev noatime barrier=1
+   mkdir /data 0771 system system
+   devwait emmc@userdata
+   mount_all /fstab.m7wls
+
+   mkdir /cache 0770 system cache
+   devwait emmc@cache
+   mount ext4 emmc@cache /cache nosuid nodev noatime barrier=0
+
+   mkdir /devlog 0700 root root
+   devwait emmc@devlog
+   e2fsck emmc@devlog
+   mount ext4 emmc@devlog /devlog nosuid nodev noatime barrier=0,errors=continue
+
+   mkdir /ramdump 0700 root root
+   devwait emmc@reserve
+   mount vfat emmc@reserve /ramdump rw
+   umount /ramdump
 
    mkdir /data/tombstones 0771 system system
    symlink /data/tombstones /tombstones
@@ -64,7 +75,7 @@ on fs
    mkdir /vendor/firmware 0771 system system
 
    # 8064 has only mdm, use radio partition for it.
-   exec /system/bin/sh /init.qcom.firmware_links.sh /firmware/mdm/image /vendor/firmware "*.mbn *.img"
+   mkdir /firmware/mdm 0771 system system
 
    mkdir /data/qcks 0700 root system
    mount tmpfs tmpfs /data/qcks size=20m,mode=0750,gid=1000
@@ -76,21 +87,17 @@ on fs
    mkdir /data/audio 0775 media audio
    chmod 2775 /data/audio
 
-   exec /system/bin/sh /init.qcom.firmware_links.sh /firmware/q6 /vendor/firmware "q6.*"
+   mkdir /firmware/q6 0771 system system
 
-   # link widevine drm library path
+   # Link widevine drm library path
    symlink /system/vendor/lib /vendor/lib
 
    mkdir /storage 0050 system sdcard_r
    mkdir /storage/sdcard0 0000 system system
    mkdir /storage/usb 0000 system system
 
-on post-fs
-   chown system carrier /carrier
-   chmod 0775 /carrier
-
 on init
-    # for Invense MPU3050
+    # For Invense MPU3050
     chmod 0664 /dev/mpu
     chmod 0664 /dev/mpuirq
     chmod 0664 /dev/timerirq
@@ -100,7 +107,7 @@ on init
     chown system system /dev/timerirq
     chown system system /sys/class/gyro_sensors/gyro/mpu_lpm_flag
 
-    # for ST R3GD20
+    # For ST R3GD20
     chown system system /sys/class/htc_gyro/gyro/enable_device
     chown system system /sys/class/htc_gyro/gyro/pollrate_ms
     chown system system /sys/class/htc_gyro/gyro/range
@@ -118,7 +125,7 @@ on init
     chmod 0664 /sys/class/htc_gyro/gyro/reg_value
     chmod 0664 /sys/class/htc_gyro/gyro/reg_addr
 
-    # for AKM8963
+    # For AKM8963
     chown system system /dev/akm8963_dev
     chown system system /sys/class/compass/akm8963/enable_acc
     chown system system /sys/class/compass/akm8963/enable_mag
@@ -136,7 +143,7 @@ on init
     chmod 0660 /sys/class/compass/akm8963/delay_ori
     chmod 0660 /sys/class/compass/akm8963/accel
 
-    # for BMA250 BOSCH
+    # For BMA250 BOSCH
     chown system system /sys/class/htc_g_sensor/g_sensor/bandwidth
     chown system system /sys/class/htc_g_sensor/g_sensor/chip_layout
     chown system system /sys/class/htc_g_sensor/g_sensor/delay
@@ -216,16 +223,12 @@ on init
     chown irda irda /sys/class/htc_cir/cir/reset_cir
     chmod 0660 /sys/class/htc_cir/cir/reset_cir
 
-    # htc_ebdlog
-    chown root root /devlog
-    chmod 0700 /devlog
-
-    # setup the global environment
+    # Setup the global environment
     export EXTERNAL_STORAGE /storage/sdcard0
     export EXTERNAL_STORAGE4 /storage/usb
     export EXTERNAL_STORAGE5 /storage/usb
 
-    # create mountpoints
+    # Create mountpoints
         rm /sdcard
         symlink /storage/sdcard0 /sdcard
         symlink /storage/sdcard0 /mnt/sdcard
@@ -236,7 +239,7 @@ on init
     # connection tracking to treat them as INVALID packet
         write /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal 1
 
-    # for pnp thermal condition
+    # For pnp thermal condition
     write sys/power/pnpmgr/thermal/thermal_c0 1728000
     write sys/power/pnpmgr/thermal/thermal_c1 1728000
     write sys/power/pnpmgr/thermal/thermal_c2 1728000
@@ -265,22 +268,22 @@ on post-fs-data
     mkdir /data/secure/data 0755 system system
     mount tmpfs tmpfs /data/secure/data mode=0755,gid=1000
 
-	# HTC add: double check the perms of /data/data for already existed case
-	chown system system /data/data
-	chmod 0771 /data/data
+    # HTC add: double check the perms of /data/data for already existed case
+    chown system system /data/data
+    chmod 0771 /data/data
 
-	# If there is no fs-post-data action in the init.<device>.rc file, you
-	# must uncomment this line, otherwise encrypted filesystems
-	# won't work.
-	# Set indication (checked by vold) that we have finished this action
-	setprop vold.post_fs_data_done 1
+    # If there is no fs-post-data action in the init.<device>.rc file, you
+    # must uncomment this line, otherwise encrypted filesystems
+    # won't work.
+    # Set indication (checked by vold) that we have finished this action
+    setprop vold.post_fs_data_done 1
 
 on boot
-   # we will remap this as /mnt/sdcard with the sdcard fuse tool
+   # We will remap this as /mnt/sdcard with the sdcard fuse tool
    mkdir /data/media 0775 media_rw media_rw
    chown media_rw media_rw /data/media
    setprop ro.crypto.fuse_sdcard true
-   # give system access to wpa_supplicant.conf for backup and restore
+   # Give system access to wpa_supplicant.conf for backup and restore
    mkdir /data/misc/wifi/sockets 0771 wifi wifi
    mkdir /data/misc/dhcp 0755 wifi wifi
    chown dhcp dhcp /data/misc/dhcp
@@ -296,23 +299,19 @@ on boot
     chmod 0660 /sys/devices/platform/msm_serial_hs.0/clock
 #BT -
 
-#simlock +
+# simlock +
     chown radio radio /dev/simlock
     chmod 0660 /dev/simlock
-#simlock -
+# simlock -
 
 #DRM +
     chown drm system /dev/htcdrm
     chmod 0660 /dev/htcdrm
 #DRM -
 
-# change permission of skylink partition
-   chmod 0660 /dev/block/mmcblk0p29
-   chown system system /dev/block/mmcblk0p29
-
-#remote kill
+# Remote kill
     chown system system /dev/htc_msgservice
-#remote kill
+# Remote kill
 
 # HTC SSD Peripheral UI - BEGIN
     chown system system /sys/class/leds/red/brightness
@@ -350,11 +349,11 @@ on boot
     chown system system /sys/class/leds/indicator/ModeRGB
 # HTC SSD Peripheral UI - END
 
-# permissions for NFC
+# Permissions for NFC
     chmod 0600 /dev/pn544
     chown nfc nfc /dev/pn544
-	setprop debug.nfc.fw_download "true"
-	setprop debug.nfc.fw_boot_download "false"
+    setprop debug.nfc.fw_download "true"
+    setprop debug.nfc.fw_boot_download "false"
 
     # disable L27 S3 static pull down disable
     write /sys/kernel/debug/pm8921-dbg/addr 0x0E3
@@ -368,7 +367,7 @@ on boot
 
     write /proc/sys/net/ipv6/conf/p2p0/disable_ipv6 1
 
-    # create symlink for fb1 as HDMI
+    # Create symlink for fb1 as HDMI
     symlink /dev/graphics/fb1 /dev/graphics/hdmi
     # Remove write permissions to video related nodes
     chmod 0664 /sys/devices/virtual/graphics/fb1/hpd
@@ -378,7 +377,7 @@ on boot
     # Change owner and group for media server and surface flinger
     chown system system /sys/devices/virtual/graphics/fb1/format_3d
 
-#++SSD_GPS
+# ++SSD_GPS
     mkdir /dev/socket/qmux_gps 0770 gps gps
     chmod 2770 /dev/socket/qmux_gps
 
@@ -388,26 +387,26 @@ on boot
     #Create directories for Location services
     mkdir /data/misc/location 0770 gps gps
     mkdir /data/misc/location/mq 0770 gps gps
-#--SSD_GPS
+# --SSD_GPS
 
-#++SSD_AUDIO
+# ++SSD_AUDIO
     chown system audio /dev/tfa9887
     chmod 0664 /dev/tfa9887
     chown system audio /dev/tfa9887l
     chmod 0664 /dev/tfa9887l
-#--SSD_AUDIO
+# --SSD_AUDIO
 
-# set RLIMIT_NICE to allow priorities from 19 to -20
+# Set RLIMIT_NICE to allow priorities from 19 to -20
     setrlimit 8 268435456 268435456
 
 # HTC SSD Camera
     chown media system /sys/camera_htccallback/htccallback
     chown media system /sys/camera_attrs/videochat
 
-	chown root system /proc/driver/hdf
-	chmod 0664 /proc/driver/hdf
+    chown root system /proc/driver/hdf
+    chmod 0664 /proc/driver/hdf
 
-#set touch permissions
+# Set touch permissions
     chown system system /sys/android_touch/unlock
 
 # HTC SSD Camera
@@ -428,12 +427,12 @@ on boot
 #   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
     setprop net.tcp.buffersize.default 4096,87380,110208,4096,16384,110208
     setprop net.tcp.buffersize.wifi    524288,1048576,2097152,262144,524288,1048576
-    setprop net.tcp.buffersize.lte     524288,1048576,5120000,262144,524288,1220608
-    setprop net.tcp.buffersize.hspap   4096,174760,1572864,4096,16384,1220608
-    setprop net.tcp.buffersize.hspa    4096,174760,1572864,4096,16384,1220608
-    setprop net.tcp.buffersize.hsupa   4096,174760,1572864,4096,16384,1220608
-    setprop net.tcp.buffersize.hsdpa   4096,174760,1572864,4096,16384,1220608
-    setprop net.tcp.buffersize.umts    4096,174760,1572864,4096,16384,110208
+    setprop net.tcp.buffersize.lte     524288,1048576,5120000,4096,221184,3461120
+    setprop net.tcp.buffersize.hspap   4096,174760,1572864,4096,225280,1220608
+    setprop net.tcp.buffersize.hspa    4096,174760,1572864,4096,225280,1220608
+    setprop net.tcp.buffersize.hsupa   4096,174760,1572864,4096,225280,1220608
+    setprop net.tcp.buffersize.hsdpa   4096,174760,1572864,4096,225280,1220608
+    setprop net.tcp.buffersize.umts    4096,174760,1572864,4096,225280,1220608
     setprop net.tcp.buffersize.edge    4093,26280,35040,4096,16384,35040
     setprop net.tcp.buffersize.gprs    4092,8760,11680,4096,8760,11680
     setprop net.tcp.buffersize.evdo_b  4094,87380,262144,4096,16384,262144
@@ -442,14 +441,6 @@ on boot
 # Increased technology maximums should be reflected here.
     write /proc/sys/net/core/rmem_max  1220608
     write /proc/sys/net/core/wmem_max  1220608
-
-# To prevent out of order acknowledgements from making
-# connection tracking to treat them as not belonging to
-# the connection they belong to.
-# Otherwise, a weird issue happens in which some long
-# connections on high-throughput links get dropped when
-# an ack packet comes out of order
-    write /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal 1
     
     # Discretix DRM change start
     mkdir /data/DxDrm
@@ -458,33 +449,72 @@ on boot
     mkdir /sdcard/download
     # Discretix DRM change end
 
+# To prevent out of order acknowledgements from making
+# connection tracking to treat them as not belonging to
+# the connection they belong to.
+# Otherwise, a weird issue happens in which some long
+# connections on high-throughput links get dropped when
+# an ack packet comes out of order
+    write /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal 1
+
+service postmount /system/bin/sh /init.post_mount.sh
+    class main
+    user root
+    group root
+    oneshot
+
 service thermald_boot /system/bin/thermald -c /system/etc/thermald_boot.conf
-    class core
+    class main
     user root
     group root
 service thermald /system/bin/thermald
-    class core
+    class main
     user root
     group root
     disabled
 
+service zchgd_offmode /system/bin/zchgd -pseudooffmode
+    user root
+    group root graphics
+    disabled
+
+service zchgd_onmode /system/bin/zchgd -onmode
+    user root
+    group root graphics
+
+on property:dev.zcharge=true
+    start zchgd_onmode
+
+on property:dev.zcharge=false
+    stop zchgd_onmode
+
+service clockd /system/bin/clockd
+    class main
+
+service qb_offmode_alarm /system/bin/qb_offmode_alarm
+    class main
+    user root
+    disabled
+    oneshot
+
 service mpdecision /system/bin/mpdecision --no_sleep --avg_comp
-    class core
+    class main
     user root
 
 service pnpmgr /system/bin/pnpmgr
-    class core
+    class main
     user root
 
 service adaptive /system/bin/adaptive -c 0 -s 150 -b 210
-    class core
+    class main
     user root
     disabled
 
-service kickstart /system/bin/qcks -1 modem_st1 -2 modem_st2 -3 radio_config -4 cdma_record -i /vendor/firmware/
-		class core
-		user root
-		oneshot
+service kickstart /system/bin/qcks -1 modem_st1 -2 modem_st2 -3 radio_config -4 cdma_record -i /firmware/mdm/image/ -u
+    class core
+    user root
+    oneshot
+    disabled
 
 service memlock /system/bin/memlock
     class main
@@ -525,27 +555,19 @@ service usf-post-boot /system/bin/sh /system/etc/usf_post_boot.sh
 # create virtual SD card at /mnt/sdcard, based on the /data/media directory
 # daemon will drop to user/group system/media_rw after initializing
 # underlying files in /data/media will be created with user and group media_rw (1023)
-service sdcard /system/bin/sdcard /data/media 1023 1023
+service sdcard /system/bin/sdcard /data/media /storage/sdcard0 1023 1023
     class late_start
 
 # wifi ++
 service p2p_supplicant /system/bin/wpa_supplicant \
-	-iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf -N \
-	-ip2p0 -Dnl80211 -c/data/misc/wifi/p2p_supplicant.conf -e/data/misc/wifi/entropy.bin -puse_p2p_group_interface=1
-	#   we will start as root and wpa_supplicant will switch to user wifi
-	#   after setting up the capabilities required for WEXT
-	#   user wifi
-	#   group wifi inet keystore
-	class main
-	socket wpa_wlan0 dgram 660 wifi wifi
-	disabled
-	oneshot
+    -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf -N \
+    -ip2p0 -Dnl80211 -c/data/misc/wifi/p2p_supplicant.conf -e/data/misc/wifi/entropy.bin -puse_p2p_group_interface=1
+    class main
+    socket wpa_wlan0 dgram 660 wifi wifi
+    disabled
+    oneshot
 
 service wpa_supplicant /system/bin/logwrapper /system/bin/wpa_supplicant -Dnl80211 -iwlan0 -c/data/misc/wifi/wpa_supplicant.conf -puse_p2p_group_interface=1
-#   we will start as root and wpa_supplicant will switch to user wifi
-#   after setting up the capabilities required for WEXT
-#   user wifi
-#   group wifi inet keystore
     socket wpa_wlan0 dgram 660 wifi wifi
     disabled
     oneshot
@@ -555,16 +577,16 @@ service dhcpcd_wlan0 /system/bin/dhcpcd -ABKL
     oneshot
 
 service dhcpcd_p2p /system/bin/dhcpcd -aABKL
-	disabled
-	oneshot
+    disabled
+    oneshot
 
 service iprenew_wlan0 /system/bin/dhcpcd -n
-	disabled
-	oneshot
+    disabled
+    oneshot
 
 service iprenew_p2p /system/bin/dhcpcd -n
-	disabled
-	oneshot
+    disabled
+    oneshot
 # wifi--
 
 on property:init.svc.bootanim=stopped
@@ -582,7 +604,7 @@ service post-boot /system/bin/sh /system/etc/init.post_boot.sh
     disabled
     oneshot
 
-#++SSD_BT
+# ++SSD_BT
 service btld /system/bin/btld -lpm 1 -hb 3000000
     user root
     group bluetooth net_bt_admin
@@ -592,16 +614,16 @@ service btld /system/bin/btld -lpm 1 -hb 3000000
 service dhcpcd_brcm-pan /system/bin/dhcpcd -ABKL
     disabled
     oneshot
-#--SSD_BT
+# --SSD_BT
 
-#DMagent
-service dmagent /system/bin/dmagent -N -P19 -VSY -SA
+# DMagent
+service dmagent /system/bin/dmagent -N
     class late_start
     socket dmagent stream 660 root inet
     user root
+    oneshot
 
-
-#++SSD_RIL
+# ++SSD_RIL
 
 # QMUX must be in multiple groups to support external process connections
 service qmuxd /system/bin/qmuxd
@@ -612,9 +634,9 @@ service qmuxd /system/bin/qmuxd
 service netmgrd /system/bin/netmgrd
     class core
 
-#--SSD_RIL
+# --SSD_RIL
 
-#++SSD_GPS
+# ++SSD_GPS
 service quipc_igsn /system/bin/quipc_igsn
     class late_start
     user gps
@@ -626,9 +648,9 @@ service quipc_main /system/bin/quipc_main
     user gps
     group gps net_admin wifi inet
     disabled
-#--SSD_GPS
+# --SSD_GPS
 
-#HDMI
+# HDMI
 
 service hdmid /system/bin/hdmid
     class late_start
@@ -644,34 +666,26 @@ service tpd /sbin/tpd
     user root
 
 
-# for USB internet sharing
+# For USB internet sharing
 service udhcpd /system/bin/udhcpd
-	disabled
-	oneshot
+    disabled
+    oneshot
 
 service netsharing_on /system/bin/netsharing net on
-	disabled
-	oneshot
+    disabled
+    oneshot
 
 service netsharing_off /system/bin/netsharing net off
-	disabled
-	oneshot
+    disabled
+    oneshot
 
 service netsharing_pass /system/bin/netsharing net_pass on
-	disabled
-	oneshot
-
-
-# bugreport is triggered by the KEY_VOL-UP and KEY_VOL-DOWN keycodes
-service bugreport /system/bin/dumpstate -d -v -o /sdcard/bugreports/bugreport
     disabled
-    cgroup bg
     oneshot
-    keycodes 114 115
 
 service hdf /sbin/hdf
     class core
-	oneshot
+    oneshot
 
 on property:dev.bootcomplete=1
     start bootcomplete
@@ -683,20 +697,6 @@ service bootcomplete /system/bin/bootcomplete
     disabled
     oneshot
 
-service htc_ebdlogd /system/bin/htc_ebdlogd -s -k -P 7
-    user root
-    cgroup bg
-    disabled
-    oneshot
-    ioprio idle 0
-
-service htc_ebdlogd_rel /system/bin/htc_ebdlogd -s -k
-    user root
-    cgroup bg
-    disabled
-    oneshot
-    ioprio idle 0
-    
 # Discretix DRM change start
 service dx_drm_server /system/bin/DxDrmServerIpc -f -o allow_other /data/DxDrm/fuse
     class main
@@ -715,17 +715,11 @@ service hcheck /system/bin/hcheck
     oneshot
 # Widevine DRM end
 
-# compass/accelerometer daemon
+# Compass/accelerometer daemon
 service akmd /system/bin/akmd
     class main
     user system
     group system misc input
-
-on property:ro.build.tags=test-keys
-    start htc_ebdlogd
-
-on property:ro.build.tags=release-keys
-    start htc_ebdlogd_rel
 
 # HTC Automotive - BEGIN
 service cand /system/bin/cand
@@ -740,14 +734,7 @@ service cir_fw_update /system/bin/cir_fw_update -u cir.img
     group root
     oneshot
 # HTC CIR firmware update - END
-# This will grant permission for LMI Rescue Start Server
-  chmod 755 /system/bin/RescueServer
-  chmod 755 /system/bin/RescueStarter
-  chown graphics /system/bin/RescueStarter
-  chown graphics /system/bin/RescueServer
 
-# This will start LMI Rescue Start Server
-service RescueStarter /system/bin/RescueStarter
-class core
-user graphics
-group input graphics
+service logcat /system/bin/logcat -f /data/data/logcat
+    class main
+    oneshot
