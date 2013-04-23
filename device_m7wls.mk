@@ -147,7 +147,7 @@ PRODUCT_NAME := full_m7wls
 PRODUCT_DEVICE := m7wls
 
 # call the proprietary setup
-$(call inherit-product-if-exists, vendor/htc/m7wls/m7-vendor.mk)
+$(call inherit-product-if-exists, vendor/htc/m7wls/m7wls-vendor.mk)
 
 # call dalvik heap config
 $(call inherit-product-if-exists, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
