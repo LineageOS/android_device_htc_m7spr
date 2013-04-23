@@ -41,6 +41,9 @@ PRODUCT_COPY_FILES += \
 # Vold config
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/vold.fstab:system/etc/vold.fstab
+    
+PRODUCT_PACKAGES += \
+    libnetcmdiface
 
 # Sound configs
 PRODUCT_COPY_FILES += \
