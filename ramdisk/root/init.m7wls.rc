@@ -36,7 +36,7 @@ service qcamerasvr /system/bin/mm-qcamera-daemon
 on emmc-fs
    mkdir /system
    devwait emmc@system
-   mount ext4 emmc@system /system ro noatime barrier=0
+   mount ext4 emmc@system /system ro noatime barrier=1
 
    # Load Mocana FIPS module. Add here since it can make sure system is mounted
    insmod /system/lib/modules/moc_platform_mod.ko
@@ -50,17 +50,22 @@ on emmc-fs
 
    mkdir /cache 0770 system cache
    devwait emmc@cache
-   mount ext4 emmc@cache /cache nosuid nodev noatime barrier=0
+   mount ext4 emmc@cache /cache nosuid nodev noatime barrier=1
 
    mkdir /devlog 0700 root root
    devwait emmc@devlog
    e2fsck emmc@devlog
-   mount ext4 emmc@devlog /devlog nosuid nodev noatime barrier=0,errors=continue
+   mount ext4 emmc@devlog /devlog nosuid nodev noatime barrier=1,errors=continue
 
    mkdir /ramdump 0700 root root
    devwait emmc@reserve
    mount vfat emmc@reserve /ramdump rw
    umount /ramdump
+
+   # mount carrier partition
+   mkdir /carrier 0775 system carrier
+   devwait emmc@carrier
+   mount ext4 emmc@carrier /carrier nosuid nodev noatime barrier=1
 
    mkdir /data/tombstones 0771 system system
    symlink /data/tombstones /tombstones
@@ -76,6 +81,9 @@ on emmc-fs
 
    # 8064 has only mdm, use radio partition for it.
    mkdir /firmware/mdm 0771 system system
+   devwait emmc@radio
+   mount vfat emmc@radio /firmware/mdm ro shortname=lower
+   exec /system/bin/sh /init.qcom.firmware_links.sh /firmware/mdm/image /vendor/firmware "*.mbn *.img"
 
    mkdir /data/qcks 0700 root system
    mount tmpfs tmpfs /data/qcks size=20m,mode=0750,gid=1000
@@ -88,6 +96,9 @@ on emmc-fs
    chmod 2775 /data/audio
 
    mkdir /firmware/q6 0771 system system
+   devwait emmc@adsp
+   mount vfat emmc@adsp /firmware/q6 ro shortname=lower
+   exec /system/bin/sh /init.qcom.firmware_links.sh /firmware/q6 /vendor/firmware "q6.*"
 
    # Link widevine drm library path
    symlink /system/vendor/lib /vendor/lib
@@ -95,6 +106,10 @@ on emmc-fs
    mkdir /storage 0050 system sdcard_r
    mkdir /storage/sdcard0 0000 system system
    mkdir /storage/usb 0000 system system
+
+on post-fs
+   chown system carrier /carrier
+   chmod 0775 /carrier
 
 on init
     # For Invense MPU3050
@@ -309,6 +324,10 @@ on boot
     chmod 0660 /dev/htcdrm
 #DRM -
 
+# change permission of skylink partition
+   chmod 0660 /dev/block/mmcblk0p29
+   chown system system /dev/block/mmcblk0p29
+
 # Remote kill
     chown system system /dev/htc_msgservice
 # Remote kill
@@ -427,12 +446,12 @@ on boot
 #   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
     setprop net.tcp.buffersize.default 4096,87380,110208,4096,16384,110208
     setprop net.tcp.buffersize.wifi    524288,1048576,2097152,262144,524288,1048576
-    setprop net.tcp.buffersize.lte     524288,1048576,5120000,4096,221184,3461120
-    setprop net.tcp.buffersize.hspap   4096,174760,1572864,4096,225280,1220608
-    setprop net.tcp.buffersize.hspa    4096,174760,1572864,4096,225280,1220608
-    setprop net.tcp.buffersize.hsupa   4096,174760,1572864,4096,225280,1220608
-    setprop net.tcp.buffersize.hsdpa   4096,174760,1572864,4096,225280,1220608
-    setprop net.tcp.buffersize.umts    4096,174760,1572864,4096,225280,1220608
+    setprop net.tcp.buffersize.lte     524288,1048576,5120000,262144,524288,1220608
+    setprop net.tcp.buffersize.hspap   4096,174760,1572864,4096,16384,1220608
+    setprop net.tcp.buffersize.hspa    4096,174760,1572864,4096,16384,1220608
+    setprop net.tcp.buffersize.hsupa   4096,174760,1572864,4096,16384,1220608
+    setprop net.tcp.buffersize.hsdpa   4096,174760,1572864,4096,16384,1220608
+    setprop net.tcp.buffersize.umts    4096,174760,1572864,4096,16384,110208
     setprop net.tcp.buffersize.edge    4093,26280,35040,4096,16384,35040
     setprop net.tcp.buffersize.gprs    4092,8760,11680,4096,8760,11680
     setprop net.tcp.buffersize.evdo_b  4094,87380,262144,4096,16384,262144
@@ -441,13 +460,6 @@ on boot
 # Increased technology maximums should be reflected here.
     write /proc/sys/net/core/rmem_max  1220608
     write /proc/sys/net/core/wmem_max  1220608
-    
-    # Discretix DRM change start
-    mkdir /data/DxDrm
-    mkdir /data/DxDrm/fuse
-    chmod 555 /data/DxDrm
-    mkdir /sdcard/download
-    # Discretix DRM change end
 
 # To prevent out of order acknowledgements from making
 # connection tracking to treat them as not belonging to
@@ -456,6 +468,13 @@ on boot
 # connections on high-throughput links get dropped when
 # an ack packet comes out of order
     write /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal 1
+
+   # Discretix DRM change start
+    mkdir /data/DxDrm
+    mkdir /data/DxDrm/fuse
+    chmod 555 /data/DxDrm
+    mkdir /sdcard/download
+    # Discretix DRM change end
 
 service postmount /system/bin/sh /init.post_mount.sh
     class main
@@ -510,11 +529,10 @@ service adaptive /system/bin/adaptive -c 0 -s 150 -b 210
     user root
     disabled
 
-service kickstart /system/bin/qcks -1 modem_st1 -2 modem_st2 -3 radio_config -4 cdma_record -i /firmware/mdm/image/ -u
-    class core
-    user root
-    oneshot
-    disabled
+service kickstart /system/bin/qcks -1 modem_st1 -2 modem_st2 -3 radio_config -4 cdma_record -i /vendor/firmware/
+		class core
+		user root
+		oneshot
 
 service memlock /system/bin/memlock
     class main
@@ -621,7 +639,6 @@ service dmagent /system/bin/dmagent -N
     class late_start
     socket dmagent stream 660 root inet
     user root
-    oneshot
 
 # ++SSD_RIL
 
