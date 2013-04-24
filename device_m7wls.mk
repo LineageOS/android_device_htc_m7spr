@@ -14,7 +14,6 @@
 # limitations under the License.
 #
 
-
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 # common msm8960 configs
@@ -32,6 +31,10 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/ramdisk/root/init.rc:root/init.rc \
     $(LOCAL_PATH)/ramdisk/root/ueventd.m7wls.rc:root/ueventd.m7wls.rc \
     $(LOCAL_PATH)/ramdisk/root/init.qcom.firmware_links.sh:root/init.qcom.firmware_links.sh \
+    
+# System
+ PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/init.post_boot.sh:/system/etc/init.post_boot.sh 
 
 # Custom recovery charging
 PRODUCT_COPY_FILES += \

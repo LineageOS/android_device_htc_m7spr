@@ -619,7 +619,6 @@ on property:init.svc.bootanim=stopped
 
 service post-boot /system/bin/sh /system/etc/init.post_boot.sh
     user root
-    disabled
     oneshot
 
 # ++SSD_BT
