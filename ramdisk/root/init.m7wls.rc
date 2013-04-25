@@ -381,8 +381,8 @@ on boot
     write /sys/kernel/debug/pm8921-dbg/data 0xE1
 
     # Load bcmdhd.ko while booting
-    chmod 0444 /system/lib/modules/bcmdhd.ko
-    insmod /system/lib/modules/bcmdhd.ko
+    #chmod 0444 /system/lib/modules/bcmdhd.ko
+    #insmod /system/lib/modules/bcmdhd.ko
 
     write /proc/sys/net/ipv6/conf/p2p0/disable_ipv6 1
 
@@ -638,6 +638,7 @@ service dmagent /system/bin/dmagent -N
     class late_start
     socket dmagent stream 660 root inet
     user root
+    oneshot
 
 # ++SSD_RIL
 
@@ -750,7 +751,3 @@ service cir_fw_update /system/bin/cir_fw_update -u cir.img
     group root
     oneshot
 # HTC CIR firmware update - END
-
-service logcat /system/bin/logcat -f /data/data/logcat
-    class main
-    oneshot
