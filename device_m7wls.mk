@@ -14,9 +14,6 @@
 # limitations under the License.
 #
 
-# common msm8960 configs
-$(call inherit-product, device/htc/m7-common/m7-common.mk)
-
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
 # Boot ramdisk setup
@@ -44,6 +41,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PRODUCT_NAME := full_m7wls
 PRODUCT_DEVICE := m7wls
+
+# common m7 configs
+$(call inherit-product, device/htc/m7-common/m7-common.mk)
 
 # call the proprietary setup
 $(call inherit-product-if-exists, vendor/htc/m7wls/m7wls-vendor.mk)
