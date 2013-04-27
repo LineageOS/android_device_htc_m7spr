@@ -18,9 +18,9 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
 # Boot ramdisk setup
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/root/fstab.m7wls:root/fstab.m7wls \
+    $(LOCAL_PATH)/root/fstab.htc:root/fstab.htc \
+    $(LOCAL_PATH)/root/init.m7wls.rc:root/init.m7wls.rc \
     $(LOCAL_PATH)/root/ueventd.m7wls.rc:root/ueventd.m7wls.rc \
-    $(LOCAL_PATH)/root/init.m7wls.rc:root/init.m7wls.rc
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.cdma.xml:system/etc/permissions/android.hardware.telephony.cdma.xml \
