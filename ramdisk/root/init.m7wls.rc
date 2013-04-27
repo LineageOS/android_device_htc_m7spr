@@ -190,7 +190,7 @@ on fs
     mkdir /devlog 0700 root root
     mkdir /ramdump 0700 root root
 
-    mount_all ./fstab.${ro.hardware}
+    mount_all ./fstab.m7wls
 
    # Load Mocana FIPS module. Add here since it can make sure system is mounted
    insmod /system/lib/modules/moc_platform_mod.ko
@@ -463,12 +463,6 @@ on boot
 # an ack packet comes out of order
     write /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal 1
 
-service postmount /system/bin/sh /init.post_mount.sh
-    class main
-    user root
-    group root
-    oneshot
-
 # Start camera server as daemon
 service qcamerasvr /system/bin/mm-qcamera-daemon
     class late_start
@@ -479,6 +473,7 @@ service thermald_boot /system/bin/thermald -c /system/etc/thermald_boot.conf
     class main
     user root
     group root
+    
 service thermald /system/bin/thermald
     class main
     user root
@@ -522,11 +517,10 @@ service adaptive /system/bin/adaptive -c 0 -s 150 -b 210
     user root
     disabled
 
-service kickstart /system/bin/qcks -1 modem_st1 -2 modem_st2 -3 radio_config -4 cdma_record -i /firmware/mdm/image/ -u
+service kickstart /system/bin/qcks -1 modem_st1 -2 modem_st2 -3 radio_config -4 cdma_record -i /vendor/firmware/
     class core
     user root
     oneshot
-    disabled
 
 service memlock /system/bin/memlock
     class main
@@ -612,7 +606,6 @@ on property:init.svc.bootanim=stopped
 
 service post-boot /system/bin/sh /system/etc/init.post_boot.sh
     user root
-    disabled
     oneshot
 
 # ++SSD_BT
