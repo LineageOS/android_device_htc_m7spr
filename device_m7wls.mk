@@ -24,10 +24,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/ramdisk/root/fstab.m7wls:root/fstab.m7wls \
     $(LOCAL_PATH)/ramdisk/root/init.m7wls.rc:root/init.m7wls.rc
 
-# Vold config
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/vold.fstab:system/etc/vold.fstab
-
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.cdma.xml:system/etc/permissions/android.hardware.telephony.cdma.xml \
     frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml
