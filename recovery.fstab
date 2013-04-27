@@ -23,4 +23,4 @@
 /reserve_2      emmc            /dev/block/mmcblk0p32
 /reserve_3      emmc            /dev/block/mmcblk0p34
 /sdcard         datamedia       /dev/null
-/usb-otg        vfat            /dev/block/sda1 /dev/block/sda  flags=display="USB-OTG";storage;removable;wipeingui
+#/usb-otg        vfat            /dev/block/sda1 /dev/block/sda  flags=display="USB-OTG";storage;removable;wipeingui
