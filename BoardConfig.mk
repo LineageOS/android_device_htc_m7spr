@@ -36,10 +36,6 @@ TARGET_BOOTLOADER_BOARD_NAME := m7wls
 # KernAl
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=m7wls user_debug=31
 
-# HTClog
-COMMON_GLOBAL_CFLAGS += -DHTCLOG
-
-# FIXME examination of /proc/emmc
 # cat /proc/emmc:
 # dev: size erasesize name
 # mmcblk0p19: 000ffa00 00000200 "misc"
