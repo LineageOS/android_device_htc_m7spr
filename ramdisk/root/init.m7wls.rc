@@ -231,7 +231,7 @@ on fs
    # Symlink firmwares
    exec /system/bin/sh /init.qcom.firmware_links.sh /firmware/mdm/image /vendor/firmware "*.mbn *.img"
    exec /system/bin/sh /init.qcom.firmware_links.sh /firmware/q6 /vendor/firmware "q6.*"
-   mount ext4 /dev/block/mmcblk0p35 /system ro remount
+   mount ext4 /dev/block/mmcblk0p37 /system ro remount
 
 on post-fs-data
     mkdir /data/radio 0770 radio radio
