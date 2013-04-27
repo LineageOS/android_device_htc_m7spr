@@ -26,92 +26,29 @@
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-# Start camera server as daemon
-service qcamerasvr /system/bin/mm-qcamera-daemon
-        class late_start
-        user system
-        group system camera inet graphics
-
-# On emmc mount the partition containing firmware
-on emmc-fs
-   mkdir /system
-   devwait emmc@system
-   mount ext4 emmc@system /system ro noatime barrier=1
-
-   # Load Mocana FIPS module. Add here since it can make sure system is mounted
-   insmod /system/lib/modules/moc_platform_mod.ko
-   insmod /system/lib/modules/moc_crypto.ko
-   insmod /system/lib/modules/dm-crypt.ko
-   insmod /system/lib/modules/wp_mod.ko
-
-   mkdir /data 0771 system system
-   devwait emmc@userdata
-   mount_all /fstab.m7wls
-
-   mkdir /cache 0770 system cache
-   devwait emmc@cache
-   mount ext4 emmc@cache /cache nosuid nodev noatime barrier=1
-
-   mkdir /devlog 0700 root root
-   devwait emmc@devlog
-   e2fsck emmc@devlog
-   mount ext4 emmc@devlog /devlog nosuid nodev noatime barrier=1,errors=continue
-
-   mkdir /ramdump 0700 root root
-   devwait emmc@reserve
-   mount vfat emmc@reserve /ramdump rw
-   umount /ramdump
-
-   # mount carrier partition
-   mkdir /carrier 0775 system carrier
-   devwait emmc@carrier
-   mount ext4 emmc@carrier /carrier nosuid nodev noatime barrier=1
-
-   mkdir /data/tombstones 0771 system system
-   symlink /data/tombstones /tombstones
-   mkdir /tombstones/mdm 0771 system system
-   mkdir /tombstones/modem 0771 system system
-   mkdir /tombstones/lpass 0771 system system
-   mkdir /tombstones/dsps 0771 system system
-
-   # For firmwares
-   mkdir /firmware 0771 system system
-   mkdir /vendor 0771 system system
-   mkdir /vendor/firmware 0771 system system
-
-   # 8064 has only mdm, use radio partition for it.
-   mkdir /firmware/mdm 0771 system system
-   devwait emmc@radio
-   mount vfat emmc@radio /firmware/mdm ro shortname=lower
-   exec /system/bin/sh /init.qcom.firmware_links.sh /firmware/mdm/image /vendor/firmware "*.mbn *.img"
-
-   mkdir /data/qcks 0700 root system
-   mount tmpfs tmpfs /data/qcks size=20m,mode=0750,gid=1000
-
-   mkdir /data/efs 0700 root system
-   mount tmpfs tmpfs /data/efs size=20m,mode=0750,gid=1000
-
-   # 8064 need to created this folder for CSD-QMI usage
-   mkdir /data/audio 0775 media audio
-   chmod 2775 /data/audio
-
-   mkdir /firmware/q6 0771 system system
-   devwait emmc@adsp
-   mount vfat emmc@adsp /firmware/q6 ro shortname=lower
-   exec /system/bin/sh /init.qcom.firmware_links.sh /firmware/q6 /vendor/firmware "q6.*"
-
-   # Link widevine drm library path
-   symlink /system/vendor/lib /vendor/lib
-
-   mkdir /storage 0050 system sdcard_r
-   mkdir /storage/sdcard0 0000 system system
-   mkdir /storage/usb 0000 system system
-
-on post-fs
-   chown system carrier /carrier
-   chmod 0775 /carrier
+import init.m7.usb.rc
 
 on init
+    mkdir /mnt/shell/emulated 0700 shell shell
+    mkdir /storage/emulated 0555 root root
+    mkdir /storage/sdcard1 0775 system system
+    mkdir /storage/usbdisk 0775 system system
+
+    export EXTERNAL_STORAGE /storage/emulated/legacy
+    export SECONDARY_STORAGE /storage/sdcard1
+    export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
+    export EMULATED_STORAGE_TARGET /storage/emulated
+
+    # for backwards compatibility
+    symlink /storage/emulated/legacy /sdcard
+    symlink /storage/emulated/legacy /mnt/sdcard
+    symlink /storage/emulated/legacy /storage/sdcard0
+    symlink /mnt/shell/emulated/0 /storage/emulated/legacy
+    symlink /storage/sdcard1 /ext_card
+    symlink /storage/sdcard1 /mnt/ext_card
+    symlink /storage/usbdisk /usbdisk
+    symlink /storage/usbdisk /mnt/usbdisk
+
     # For Invense MPU3050
     chmod 0664 /dev/mpu
     chmod 0664 /dev/mpuirq
@@ -263,10 +200,58 @@ on init
     write sys/power/pnpmgr/thermal/thermal_g0 450000000
     write /sys/power/pnpmgr/apps/media_mode "booting"
 
+# On emmc mount the partition containing firmware
+on fs
+    mkdir /devlog 0700 root root
+    mkdir /ramdump 0700 root root
+
+    mount_all ./fstab.m7wls
+
+   # Load Mocana FIPS module. Add here since it can make sure system is mounted
+   insmod /system/lib/modules/moc_platform_mod.ko
+   insmod /system/lib/modules/moc_crypto.ko
+   insmod /system/lib/modules/dm-crypt.ko
+   insmod /system/lib/modules/wp_mod.ko
+
+   mkdir /data/tombstones 0771 system system
+   symlink /data/tombstones /tombstones
+   mkdir /tombstones/mdm 0771 system system
+   mkdir /tombstones/modem 0771 system system
+   mkdir /tombstones/lpass 0771 system system
+   mkdir /tombstones/dsps 0771 system system
+
+   # For firmwares
+   mkdir /firmware 0771 system system
+   mkdir /vendor 0771 system system
+   mkdir /vendor/firmware 0771 system system
+
+   # 8064 has only mdm, use radio partition for it.
+   mkdir /firmware/mdm 0771 system system
+
+   mkdir /data/qcks 0700 root system
+   mount tmpfs tmpfs /data/qcks size=20m,mode=0750,gid=1000
+
+   mkdir /data/efs 0700 root system
+   mount tmpfs tmpfs /data/efs size=20m,mode=0750,gid=1000
+
+   # 8064 need to created this folder for CSD-QMI usage
+   mkdir /data/audio 0775 media audio
+   chmod 2775 /data/audio
+
+   mkdir /firmware/q6 0771 system system
+
+   # Link widevine drm library path
+   symlink /system/vendor/lib /vendor/lib
+
+   mkdir /storage 0050 system sdcard_r
+   mkdir /storage/sdcard0 0000 system system
+   mkdir /storage/usb 0000 system system
+
 on post-fs-data
     mkdir /data/radio 0770 radio radio
     chmod 2770 /data/radio
 #+SSD_RIL: from Qualcomm socket path
+    mkdir /dev/socket/qmux_radio 0770 radio radio
     chmod 2770 /dev/socket/qmux_radio
     mkdir /dev/socket/qmux_audio 0770 audio audio
     chmod 2770 /dev/socket/qmux_audio
@@ -323,10 +308,6 @@ on boot
     chown drm system /dev/htcdrm
     chmod 0660 /dev/htcdrm
 #DRM -
-
-# change permission of skylink partition
-   chmod 0660 /dev/block/mmcblk0p29
-   chown system system /dev/block/mmcblk0p29
 
 # Remote kill
     chown system system /dev/htc_msgservice
@@ -425,6 +406,26 @@ on boot
     chown root system /proc/driver/hdf
     chmod 0664 /proc/driver/hdf
 
+# For Flashlight Restriction
+    chown system system /sys/camera_led_status/led_hotspot_status
+
+# HTC set radio_feedback permissions
+    chown radio radio /dev/radio_feedback
+    chmod 0660 /dev/radio_feedback
+
+# For RIL to set htc_monitor_param permission
+    chown radio radio /sys/htc_monitor_status/htc_monitor_param
+
+# Set touch permissions
+    chown system system /sys/android_touch/unlock
+
+# Set volume key wake up attribute file permission
+    chown media media /sys/keyboard/vol_wakeup
+
+# For camera to switch burst mode
+    chown media media /sys/devices/platform/msm_sdcc.1/burst
+    chown media media /proc/emmc_burst
+
 # Set touch permissions
     chown system system /sys/android_touch/unlock
 
@@ -446,12 +447,12 @@ on boot
 #   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
     setprop net.tcp.buffersize.default 4096,87380,110208,4096,16384,110208
     setprop net.tcp.buffersize.wifi    524288,1048576,2097152,262144,524288,1048576
-    setprop net.tcp.buffersize.lte     524288,1048576,5120000,262144,524288,1220608
-    setprop net.tcp.buffersize.hspap   4096,174760,1572864,4096,16384,1220608
-    setprop net.tcp.buffersize.hspa    4096,174760,1572864,4096,16384,1220608
-    setprop net.tcp.buffersize.hsupa   4096,174760,1572864,4096,16384,1220608
-    setprop net.tcp.buffersize.hsdpa   4096,174760,1572864,4096,16384,1220608
-    setprop net.tcp.buffersize.umts    4096,174760,1572864,4096,16384,110208
+    setprop net.tcp.buffersize.lte     524288,1048576,5120000,4096,221184,3461120
+    setprop net.tcp.buffersize.hspap   4096,174760,1572864,4096,225280,1220608
+    setprop net.tcp.buffersize.hspa    4096,174760,1572864,4096,225280,1220608
+    setprop net.tcp.buffersize.hsupa   4096,174760,1572864,4096,225280,1220608
+    setprop net.tcp.buffersize.hsdpa   4096,174760,1572864,4096,225280,1220608
+    setprop net.tcp.buffersize.umts    4096,174760,1572864,4096,225280,1220608
     setprop net.tcp.buffersize.edge    4093,26280,35040,4096,16384,35040
     setprop net.tcp.buffersize.gprs    4092,8760,11680,4096,8760,11680
     setprop net.tcp.buffersize.evdo_b  4094,87380,262144,4096,16384,262144
@@ -460,6 +461,13 @@ on boot
 # Increased technology maximums should be reflected here.
     write /proc/sys/net/core/rmem_max  1220608
     write /proc/sys/net/core/wmem_max  1220608
+    
+    # Discretix DRM change start
+    mkdir /data/DxDrm
+    mkdir /data/DxDrm/fuse
+    chmod 555 /data/DxDrm
+    mkdir /sdcard/download
+    # Discretix DRM change end
 
 # To prevent out of order acknowledgements from making
 # connection tracking to treat them as not belonging to
@@ -469,18 +477,17 @@ on boot
 # an ack packet comes out of order
     write /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal 1
 
-   # Discretix DRM change start
-    mkdir /data/DxDrm
-    mkdir /data/DxDrm/fuse
-    chmod 555 /data/DxDrm
-    mkdir /sdcard/download
-    # Discretix DRM change end
-
 service postmount /system/bin/sh /init.post_mount.sh
     class main
     user root
     group root
     oneshot
+
+# Start camera server as daemon
+service qcamerasvr /system/bin/mm-qcamera-daemon
+    class late_start
+    user system
+    group system camera inet graphics
 
 service thermald_boot /system/bin/thermald -c /system/etc/thermald_boot.conf
     class main
@@ -529,14 +536,14 @@ service adaptive /system/bin/adaptive -c 0 -s 150 -b 210
     user root
     disabled
 
-service kickstart /system/bin/qcks -1 modem_st1 -2 modem_st2 -3 radio_config -4 cdma_record -i /vendor/firmware/
-		class core
-		user root
-		oneshot
+service kickstart /system/bin/qcks -1 modem_st1 -2 modem_st2 -3 radio_config -4 cdma_record -i /firmware/mdm/image/ -u
+    class core
+    user root
+    oneshot
+    disabled
 
 service memlock /system/bin/memlock
     class main
-    cgroup bg
     user root
 
 service usf_tester /system/bin/usf_tester
@@ -585,7 +592,9 @@ service p2p_supplicant /system/bin/wpa_supplicant \
     disabled
     oneshot
 
-service wpa_supplicant /system/bin/logwrapper /system/bin/wpa_supplicant -Dnl80211 -iwlan0 -c/data/misc/wifi/wpa_supplicant.conf -puse_p2p_group_interface=1
+service wpa_supplicant /system/bin/wpa_supplicant \
+    -Dnl80211 -iwlan0 -c/data/misc/wifi/wpa_supplicant.conf \
+    -puse_p2p_group_interface=1
     socket wpa_wlan0 dgram 660 wifi wifi
     disabled
     oneshot
@@ -619,6 +628,7 @@ on property:init.svc.bootanim=stopped
 
 service post-boot /system/bin/sh /system/etc/init.post_boot.sh
     user root
+    disabled
     oneshot
 
 # ++SSD_BT
@@ -668,7 +678,6 @@ service quipc_main /system/bin/quipc_main
 # --SSD_GPS
 
 # HDMI
-
 service hdmid /system/bin/hdmid
     class late_start
     socket displayd stream 0660 root system graphics
@@ -679,9 +688,7 @@ on property:ro.hdmi.enable=true
 
 service tpd /sbin/tpd
     class core
-    cgroup bg
     user root
-
 
 # For USB internet sharing
 service udhcpd /system/bin/udhcpd
@@ -751,3 +758,14 @@ service cir_fw_update /system/bin/cir_fw_update -u cir.img
     group root
     oneshot
 # HTC CIR firmware update - END
+
+service L2PE /system/bin/l2_profile_exchange handset softap.0
+    user root
+    group root
+    disabled
+    oneshot
+
+service priorityd /system/bin/sh /system/etc/priorityd.sh
+    user root
+    disabled
+    oneshot
