@@ -27,9 +27,6 @@
 # inherit from common msm8960
 -include device/htc/m7-common/BoardConfigCommon.mk
 
-# inherit from the proprietary version
--include vendor/htc/m7wls/BoardConfigVendor.mk
-
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := m7wls
 
@@ -66,3 +63,6 @@ BOARD_RECOVERYIMAGE_PARTITION_SIZE := 16776704
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1946156032
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 27917287424
 BOARD_FLASH_BLOCK_SIZE := 131072
+
+# inherit from the proprietary version
+-include vendor/htc/m7wls/BoardConfigVendor.mk
