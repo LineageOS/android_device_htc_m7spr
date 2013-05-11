@@ -39,9 +39,3 @@ persist.radio.snapshot_timer=22
 persist.eons.enabled=false
 telephony.rilV7NeedCDMALTEPhone=true
 ro.telephony.ril.v3=forceCdmaLteNetworkType
-
-# enable time services
-persist.timed.enable=true
-
-# UMS
-persist.sys.usb.config=mtp,adb
