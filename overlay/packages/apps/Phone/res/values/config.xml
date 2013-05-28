@@ -17,12 +17,6 @@
 <!-- device-specific phone app resources. -->
 <resources>
 
-    <!-- This device implements a noise suppression device for in call audio-->
-    <bool name="has_in_call_noise_suppression">true</bool>
-
-    <!-- Flag indicating if the tty is enabled -->
-    <bool name="tty_enabled">true</bool>
-
     <!-- Sprint Message Wait Indicator Quirk -->
     <bool name="sprint_mwi_quirk">true</bool>
 
