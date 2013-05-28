@@ -1,7 +1,1 @@
 system/lib/libril.so
-system/lib/libril-qc-qmi-1.so
-system/lib/libril-qcril-hook-oem.so
-system/lib/hw/nfc.m7wls.so
-system/lib/hw/sensors.m7wls.so
-system/vendor/firmware/libpn544_fw.so
-system/vendor/firmware/mfg.bin
