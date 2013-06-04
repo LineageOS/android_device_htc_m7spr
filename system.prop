@@ -12,7 +12,6 @@ persist.data_netmgrd_nint=16
 rild.libargs=-d /dev/smd0
 rild.libpath=/system/lib/libril-qc-qmi-1.so
 ril.subscription.types=NV,RUIM
-ro.config.svlte1x=true
 ro.cdma.subscribe_on_ruim_ready=true
 persist.radio.no_wait_for_card=0
 keyguard.no_require_sim=true
