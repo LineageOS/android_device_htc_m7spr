@@ -20,4 +20,7 @@
     <!-- Sprint Message Wait Indicator Quirk -->
     <bool name="sprint_mwi_quirk">true</bool>
 
+    <!-- Flag indicating if the phone is a world phone -->
+    <bool name="world_phone">true</bool>
+
 </resources>
