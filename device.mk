@@ -23,6 +23,9 @@ DEVICE_PACKAGE_OVERLAYS += device/htc/m7spr/overlay
 # common overlays
 DEVICE_PACKAGE_OVERLAYS += device/htc/m7-common/overlay-cdma
 
+PRODUCT_COPY_FILES += \
+    device/htc/m7spr/apns-conf.xml:system/etc/apns-conf.xml
+
 # Sprint properties
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.telephony.ril_class=HTCQualcommRIL \
