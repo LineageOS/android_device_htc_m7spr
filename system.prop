@@ -41,3 +41,13 @@ persist.eons.enabled=false
 telephony.rilV7NeedCDMALTEPhone=true
 ro.telephony.ril_class=HTCQualcommRIL
 ro.telephony.ril.v3=forceCdmaLteNetworkType
+
+
+# hardware info
+ro.device.chipset=Qualcomm SND600
+ro.device.cpu=1.7 GHz quad-core
+ro.device.gpu=Qualcomm Adreno 320
+ro.device.rear_cam= HTC UltraPixel (4mp) Camera
+ro.device.front_cam=2.1 MP
+ro.device.screen_res=4.7 inch 1080p resolution
+
