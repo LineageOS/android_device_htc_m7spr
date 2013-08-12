@@ -39,4 +39,5 @@ persist.radio.snapshot_enabled=1
 persist.radio.snapshot_timer=22
 persist.eons.enabled=false
 telephony.rilV7NeedCDMALTEPhone=true
+ro.telephony.ril_class=HTCCDMAQualcommRIL
 ro.telephony.ril.v3=forceCdmaLteNetworkType
