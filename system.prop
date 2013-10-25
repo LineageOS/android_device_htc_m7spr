@@ -37,6 +37,6 @@ gsm.operator.numeric=310120
 gsm.operator.iso-country=us
 telephony.sms.pseudo_multipart=1
 telephony.rilV7NeedCDMALTEPhone=true
-ro.telephony.ril_class=HTCQualcommRIL
+ro.telephony.ril_class=HTCQualcommM7CDMARIL
 ro.telephony.ril.v3=forceCdmaLteNetworkType
 persist.radio.use_nv_for_ehrpd=true
