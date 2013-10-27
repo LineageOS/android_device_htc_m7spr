@@ -41,14 +41,14 @@
          <EriInfo RoamingIndicator="1"
                   IconIndex="1"
                   IconMode="0"
-                  EriText="Sprint"
+                  EriText="Digital Roaming"
                   CallPromptId="0"
                   AlertId="0"/>
 
          <EriInfo RoamingIndicator="2"
                   IconIndex="2"
                   IconMode="0"
-                  EriText="Sprint"
+                  EriText="Digital Roaming"
                   CallPromptId="0"
                   AlertId="0"/>
 
