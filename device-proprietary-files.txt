@@ -1,1 +1,4 @@
+# Device-specific proprietary files
 
+# Radio
+lib/libhtc_rilhook.so
