@@ -20,5 +20,12 @@ $(call inherit-product-if-exists, vendor/htc/m7spr/m7spr-vendor.mk)
 # local overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
+# FM radio
+PRODUCT_PACKAGES += \
+    FM2 \
+    FMRecord \
+    libqcomfm_jni \
+    qcom.fmradio
+
 # Inherit from m7-common
 $(call inherit-product, device/htc/m7-common/m7-common.mk)
