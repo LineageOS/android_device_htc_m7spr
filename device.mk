@@ -24,6 +24,7 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 PRODUCT_PACKAGES += \
     FM2 \
     FMRecord \
+    libqcomfm_jni \
     qcom.fmradio
 
 # Inherit from m7-common
