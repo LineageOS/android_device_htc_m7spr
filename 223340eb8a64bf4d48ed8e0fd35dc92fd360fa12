@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a18252c_1b8683b9",
+        "filename": "cm.dependencies",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2014-10-20T16:29:50Z",
+      "side": 1,
+      "message": "Also, probably ok to move this to m7-common.",
+      "revId": "223340eb8a64bf4d48ed8e0fd35dc92fd360fa12",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
