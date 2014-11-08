@@ -20,6 +20,10 @@ $(call inherit-product-if-exists, vendor/htc/m7spr/m7spr-vendor.mk)
 # local overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
+# Permissions
+PRODUCT_COPY_FILES += \
+    device/htc/m8/configs/com.htc.software.market.xml:system/etc/permissions/com.htc.software.market.xml
+
 # FM radio
 PRODUCT_PACKAGES += \
     FM2 \
