@@ -1,13 +1,21 @@
 # system.prop for m7spr
 #
 
+# RIL - AOSP properties
 rild.libargs=-d /dev/smd0
 rild.libpath=/system/lib/libril-qc-qmi-1.so
+persist.radio.dont_use_dsd=true
+persist.radio.mode_pref_nv10=1
 persist.radio.snapshot_enabled=1
 persist.radio.snapshot_timer=22
-ro.telephony.default_network=10
+ro.ril.scan.selection.rat=1
+ro.ril.set.mtusize=1422
+ro.ril.svdo=true
+ro.telephony.default_network=8
 telephony.lteOnCdmaDevice=1
+telephony.sms.pseudo_multipart=1
 
+# Carrier definitions
 ro.cdma.home.operator.numeric=310120
 ro.cdma.home.operator.alpha=Sprint
 gsm.sim.operator.alpha=Sprint
@@ -16,5 +24,3 @@ gsm.sim.operator.iso-country=us
 gsm.operator.alpha=Sprint
 gsm.operator.numeric=310120
 gsm.operator.iso-country=us
-
-ro.ril.scan.selection.rat=1
