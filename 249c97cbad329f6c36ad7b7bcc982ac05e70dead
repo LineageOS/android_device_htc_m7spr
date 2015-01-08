@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aa08908_0fa9e5df",
+        "filename": "system.prop",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 883
+      },
+      "writtenOn": "2015-01-08T10:49:53Z",
+      "side": 0,
+      "message": "This is the most likley culprit, i would just put 8 instead of 10",
+      "revId": "249c97cbad329f6c36ad7b7bcc982ac05e70dead",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
