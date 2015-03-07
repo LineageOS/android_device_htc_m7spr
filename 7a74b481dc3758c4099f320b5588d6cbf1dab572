@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad45d7e_02b612dc",
+        "filename": "ril/telephony/java/com/android/internal/telephony/m7sprRIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2015-03-07T16:46:32Z",
+      "side": 1,
+      "message": "Camel case, M7SprRil or M7SprRIL.",
+      "revId": "7a74b481dc3758c4099f320b5588d6cbf1dab572",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_e2badebf",
+        "filename": "ril/telephony/java/com/android/internal/telephony/m7sprRIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2015-03-07T16:46:32Z",
+      "side": 1,
+      "message": "Isn\u0027t this always going to be false? Why have it?",
+      "revId": "7a74b481dc3758c4099f320b5588d6cbf1dab572",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_42b00ade",
+        "filename": "ril/telephony/java/com/android/internal/telephony/m7sprRIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2015-03-07T16:46:32Z",
+      "side": 1,
+      "message": "Is oldRil ever set?",
+      "revId": "7a74b481dc3758c4099f320b5588d6cbf1dab572",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_a2aaa66e",
+        "filename": "system.prop",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2015-03-07T16:46:32Z",
+      "side": 1,
+      "message": "This goes under the RIL section.",
+      "revId": "7a74b481dc3758c4099f320b5588d6cbf1dab572",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
