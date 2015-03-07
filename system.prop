@@ -24,3 +24,6 @@ gsm.sim.operator.iso-country=us
 gsm.operator.alpha=Sprint
 gsm.operator.numeric=310120
 gsm.operator.iso-country=us
+
+# Custom RIL Class for Sprint SIM Card Bug
+ro.telephony.ril_class=m7sprRIL
