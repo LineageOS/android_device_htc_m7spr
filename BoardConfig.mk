@@ -67,3 +67,5 @@ BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 
 # inherit from the proprietary version
 -include vendor/htc/m7spr/BoardConfigVendor.mk
+
+BOARD_RIL_CLASS := ../../../device/htc/m7spr/ril
