@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "9ad45d7e_c2c4fa41",
+        "filename": "ril/telephony/java/com/android/internal/telephony/m7sprRIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 6572
+      },
+      "writtenOn": "2015-03-07T16:51:51Z",
+      "side": 1,
+      "message": "This is the initial definition of the variable. See setPhoneType. If this ever moves to common for ril related necessities this  will prevent breakage.",
+      "parentUuid": "9ad45d7e_e2badebf",
+      "revId": "7a74b481dc3758c4099f320b5588d6cbf1dab572",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ad45d7e_42b00ade",
         "filename": "ril/telephony/java/com/android/internal/telephony/m7sprRIL.java",
         "patchSetId": 1
@@ -47,6 +65,41 @@
       "writtenOn": "2015-03-07T16:46:32Z",
       "side": 1,
       "message": "Is oldRil ever set?",
+      "revId": "7a74b481dc3758c4099f320b5588d6cbf1dab572",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_62c70e46",
+        "filename": "ril/telephony/java/com/android/internal/telephony/m7sprRIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 6572
+      },
+      "writtenOn": "2015-03-07T16:51:51Z",
+      "side": 1,
+      "message": "This is a function that exists in telephony framework already, and this function is pulled from there first before the additional \"hack\" for sprint is added on top of this. So the old ril was left from this original function. I can remove it though",
+      "parentUuid": "9ad45d7e_42b00ade",
+      "revId": "7a74b481dc3758c4099f320b5588d6cbf1dab572",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad45d7e_a2c10631",
+        "filename": "ril/telephony/java/com/android/internal/telephony/m7sprRIL.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 6572
+      },
+      "writtenOn": "2015-03-07T16:51:51Z",
+      "side": 1,
+      "message": "This is where gsm type is set",
       "revId": "7a74b481dc3758c4099f320b5588d6cbf1dab572",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
