@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4bf722a1_829b607d",
+        "filename": "device.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 16082
+      },
+      "writtenOn": "2017-11-29T17:51:33Z",
+      "side": 1,
+      "message": "y u do dis?",
+      "revId": "c332a16aaca80c6f1c77800fc55accb90f9d4bc2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8e2d7183_52cbf624",
+        "filename": "lineage.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 16082
+      },
+      "writtenOn": "2017-11-29T17:51:33Z",
+      "side": 1,
+      "message": "swap order",
+      "revId": "c332a16aaca80c6f1c77800fc55accb90f9d4bc2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
