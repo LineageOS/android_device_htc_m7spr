@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "10e3f834_6fd12515",
+        "filename": "device.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 18522
+      },
+      "writtenOn": "2017-11-29T18:26:43Z",
+      "side": 1,
+      "message": "Was using the m7 variant as a template to rebrand this device. I guess LOCAL_PATH expands to \u0027device/htc/m7spr\u0027?\n\ndevice.mk from the m7: https://github.com/LineageOS/android_device_htc_m7/blob/cm-14.1/device.mk#L28",
+      "parentUuid": "4bf722a1_829b607d",
+      "revId": "c332a16aaca80c6f1c77800fc55accb90f9d4bc2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e2d7183_52cbf624",
         "filename": "lineage.mk",
         "patchSetId": 3
