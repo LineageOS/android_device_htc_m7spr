@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d2750e84_6a7c29c9",
+        "filename": "cm.dependencies",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 16082
+      },
+      "writtenOn": "2017-11-29T10:01:46Z",
+      "side": 0,
+      "message": "again, you need this, just rename to lineage.dependencies",
+      "revId": "654926ba0a275779ce99844dca4bb997872f8f7d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4a70075a_00203a57",
+        "filename": "cm.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 16082
+      },
+      "writtenOn": "2017-11-29T10:01:46Z",
+      "side": 0,
+      "message": "don\u0027t you need this file? just rename it to lineage.mk",
+      "revId": "654926ba0a275779ce99844dca4bb997872f8f7d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}

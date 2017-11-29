@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b414830e_21efe59f",
+        "filename": "README",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 16082
+      },
+      "writtenOn": "2017-11-29T10:01:46Z",
+      "side": 1,
+      "message": "whitespace\n\nswap line order",
+      "revId": "0f1d6e9542d14adb146ef7a84f53c282e89f0836",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "80f1c376_d0ede8be",
+        "filename": "device.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 16082
+      },
+      "writtenOn": "2017-11-29T10:01:46Z",
+      "side": 1,
+      "message": "Again, no changes. Change to 2011-2016 if you wish",
+      "revId": "0f1d6e9542d14adb146ef7a84f53c282e89f0836",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fe8fc5ea_1471ba3e",
+        "filename": "device.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 16082
+      },
+      "writtenOn": "2017-11-29T10:01:46Z",
+      "side": 1,
+      "message": "why change the comment?",
+      "revId": "0f1d6e9542d14adb146ef7a84f53c282e89f0836",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e2296bf6_4ca8fb34",
+        "filename": "device.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 16082
+      },
+      "writtenOn": "2017-11-29T10:01:46Z",
+      "side": 1,
+      "message": "why?",
+      "revId": "0f1d6e9542d14adb146ef7a84f53c282e89f0836",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d659eca0_c04007d7",
+        "filename": "full_m7spr.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 16082
+      },
+      "writtenOn": "2017-11-29T10:01:46Z",
+      "side": 1,
+      "message": "Never delete copyright, only add",
+      "revId": "0f1d6e9542d14adb146ef7a84f53c282e89f0836",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
